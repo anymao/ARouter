@@ -7,8 +7,13 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
 
+import com.alibaba.android.arouter.facade.template.IInterceptorGroup;
+import com.alibaba.android.arouter.facade.template.IProviderGroup;
+import com.alibaba.android.arouter.facade.template.IRouteGroup;
+import com.alibaba.android.arouter.facade.template.IRouteRoot;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.android.arouter.thread.DefaultPoolExecutor;
 
@@ -19,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.regex.Matcher;
@@ -58,6 +65,19 @@ public class ClassUtils {
      * @return 所有class的集合
      */
     public static Set<String> getFileNameByPackageName(Context context, final String packageName) throws PackageManager.NameNotFoundException, IOException, InterruptedException {
+        final long start = SystemClock.currentThreadTimeMillis();
+        final Set<String> classNames = loadByLoadService();//loadByScanDex(context, packageName);
+        final long end = SystemClock.currentThreadTimeMillis();
+        Iterator<String> iterator = classNames.iterator();
+        int index = 1;
+        while (iterator.hasNext()){
+            Log.d(Consts.TAG,String.format("Scan class[%d]:%s",index++,iterator.next()));
+        }
+        Log.d(Consts.TAG, "Filter " + classNames.size() + " classes by packageName <" + packageName + "> time cost："+ (end-start)+"ms");
+        return classNames;
+    }
+
+    private static Set<String> loadByScanDex(Context context, final String packageName) throws InterruptedException, PackageManager.NameNotFoundException, IOException {
         final Set<String> classNames = new HashSet<>();
 
         List<String> paths = getSourcePaths(context);
@@ -101,8 +121,27 @@ public class ClassUtils {
         }
 
         parserCtl.await();
+        return classNames;
+    }
 
-        Log.d(Consts.TAG, "Filter " + classNames.size() + " classes by packageName <" + packageName + ">");
+    private static Set<String> loadByLoadService() {
+        final Set<String> classNames = new HashSet<>();
+        final Iterator<IRouteGroup> iterator1 = ServiceLoader.load(IRouteGroup.class).iterator();
+        while (iterator1.hasNext()){
+            classNames.add(iterator1.next().getClass().getName());
+        }
+        final Iterator<IInterceptorGroup> iterator2 = ServiceLoader.load(IInterceptorGroup.class).iterator();
+        while (iterator2.hasNext()){
+            classNames.add(iterator2.next().getClass().getName());
+        }
+        final Iterator<IRouteRoot> iterator3 = ServiceLoader.load(IRouteRoot.class).iterator();
+        while (iterator3.hasNext()){
+            classNames.add(iterator3.next().getClass().getName());
+        }
+        final Iterator<IProviderGroup> iterator4 = ServiceLoader.load(IProviderGroup.class).iterator();
+        while (iterator4.hasNext()){
+            classNames.add(iterator4.next().getClass().getName());
+        }
         return classNames;
     }
 
