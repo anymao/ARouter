@@ -8,7 +8,8 @@
 
     <application>
         <activity android:name="com.alibaba.android.arouter.demo.module1.TestModuleActivity" />
-        <activity android:name="com.alibaba.android.arouter.demo.module1.TestModule2Activity" />
+        <activity android:name="com.alibaba.android.arouter.demo.module1.TestModule2Activity"
+            android:process=":test"/>
         <activity android:name="com.alibaba.android.arouter.demo.module1.TestWebview" />
         <activity android:name="com.alibaba.android.arouter.demo.module1.testactivity.Test1Activity" />
         <activity android:name="com.alibaba.android.arouter.demo.module1.testactivity.Test2Activity" />

@@ -3,6 +3,7 @@ package com.alibaba.android.arouter.compiler.processor;
 import com.alibaba.android.arouter.compiler.utils.Consts;
 import com.alibaba.android.arouter.facade.annotation.Interceptor;
 import com.google.auto.service.AutoService;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -147,6 +148,7 @@ public class InterceptorProcessor extends BaseProcessor {
                     TypeSpec.classBuilder(NAME_OF_INTERCEPTOR + SEPARATOR + moduleName)
                             .addModifiers(PUBLIC)
                             .addJavadoc(WARNING_TIPS)
+                            .addAnnotation(AnnotationSpec.builder(AutoService.class).addMember("value","{$T.class}",ClassName.bestGuess(IINTERCEPTOR_GROUP)).build())
                             .addMethod(loadIntoMethodOfTollgateBuilder.build())
                             .addSuperinterface(ClassName.get(type_ITollgateGroup))
                             .build()

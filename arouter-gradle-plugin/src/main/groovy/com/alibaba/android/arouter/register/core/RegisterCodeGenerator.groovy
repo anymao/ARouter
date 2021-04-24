@@ -2,8 +2,10 @@ package com.alibaba.android.arouter.register.core
 
 import com.alibaba.android.arouter.register.utils.Logger
 import com.alibaba.android.arouter.register.utils.ScanSetting
-import org.apache.commons.io.IOUtils
-import org.objectweb.asm.*
+import jdk.internal.org.objectweb.asm.ClassReader
+import jdk.internal.org.objectweb.asm.ClassVisitor
+import jdk.internal.org.objectweb.asm.ClassWriter
+import jdk.internal.org.objectweb.asm.MethodVisitor
 
 import java.util.jar.JarEntry
 import java.util.jar.JarFile

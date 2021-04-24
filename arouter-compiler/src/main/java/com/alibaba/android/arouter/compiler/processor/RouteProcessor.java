@@ -10,6 +10,7 @@ import com.alibaba.android.arouter.facade.model.RouteMeta;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.google.auto.service.AutoService;
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -47,6 +48,7 @@ import static com.alibaba.android.arouter.compiler.utils.Consts.ACTIVITY;
 import static com.alibaba.android.arouter.compiler.utils.Consts.ANNOTATION_TYPE_AUTOWIRED;
 import static com.alibaba.android.arouter.compiler.utils.Consts.ANNOTATION_TYPE_ROUTE;
 import static com.alibaba.android.arouter.compiler.utils.Consts.FRAGMENT;
+import static com.alibaba.android.arouter.compiler.utils.Consts.IINTERCEPTOR_GROUP;
 import static com.alibaba.android.arouter.compiler.utils.Consts.IPROVIDER_GROUP;
 import static com.alibaba.android.arouter.compiler.utils.Consts.IROUTE_GROUP;
 import static com.alibaba.android.arouter.compiler.utils.Consts.ITROUTE_ROOT;
@@ -316,6 +318,7 @@ public class RouteProcessor extends BaseProcessor {
                 JavaFile.builder(PACKAGE_OF_GENERATE_FILE,
                         TypeSpec.classBuilder(groupFileName)
                                 .addJavadoc(WARNING_TIPS)
+                                .addAnnotation(AnnotationSpec.builder(AutoService.class).addMember("value","{$T.class}",ClassName.bestGuess(IROUTE_GROUP)).build())
                                 .addSuperinterface(ClassName.get(type_IRouteGroup))
                                 .addModifiers(PUBLIC)
                                 .addMethod(loadIntoMethodOfGroupBuilder.build())
@@ -346,6 +349,7 @@ public class RouteProcessor extends BaseProcessor {
             JavaFile.builder(PACKAGE_OF_GENERATE_FILE,
                     TypeSpec.classBuilder(providerMapFileName)
                             .addJavadoc(WARNING_TIPS)
+                            .addAnnotation(AnnotationSpec.builder(AutoService.class).addMember("value","{$T.class}",ClassName.bestGuess(IPROVIDER_GROUP)).build())
                             .addSuperinterface(ClassName.get(type_IProviderGroup))
                             .addModifiers(PUBLIC)
                             .addMethod(loadIntoMethodOfProviderBuilder.build())
@@ -359,6 +363,7 @@ public class RouteProcessor extends BaseProcessor {
             JavaFile.builder(PACKAGE_OF_GENERATE_FILE,
                     TypeSpec.classBuilder(rootFileName)
                             .addJavadoc(WARNING_TIPS)
+                            .addAnnotation(AnnotationSpec.builder(AutoService.class).addMember("value","{$T.class}",ClassName.bestGuess(ITROUTE_ROOT)).build())
                             .addSuperinterface(ClassName.get(elementUtils.getTypeElement(ITROUTE_ROOT)))
                             .addModifiers(PUBLIC)
                             .addMethod(loadIntoMethodOfRootBuilder.build())

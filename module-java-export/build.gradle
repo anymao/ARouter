@@ -5,6 +5,8 @@ dependencies {
     implementation project(':arouter-api')
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIB_VERSION}"
     annotationProcessor project(':arouter-compiler')
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
+
 
     implementation 'com.alibaba:fastjson:1.2.48'
 }

@@ -4,6 +4,7 @@ dependencies {
     implementation project(':arouter-annotation')
     implementation project(':arouter-api')
     annotationProcessor project(':arouter-compiler')
+    annotationProcessor 'com.google.auto.service:auto-service:1.0-rc7'
 
     implementation project(':module-java-export')
 

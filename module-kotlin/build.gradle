@@ -13,6 +13,8 @@ dependencies {
     implementation project(':arouter-api')
     implementation project(':arouter-annotation')
     kapt project(':arouter-compiler')
+    kapt 'com.google.auto.service:auto-service:1.0-rc7'
+
     implementation "com.android.support:appcompat-v7:${SUPPORT_LIB_VERSION}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
